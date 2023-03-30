@@ -9,7 +9,7 @@ import pickle
 
 app = Flask("__name__")
 
-df_1=pd.read_csv("first_telc.csv")
+df_1=pd.read_csv("C:/Users/HP/OneDrive/Desktop/capstone/test (1).csv")
 
 q = ""
 
