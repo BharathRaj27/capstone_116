@@ -6,13 +6,20 @@ model_file = 'model1.pkl'
 
 with open(model_file, 'rb') as f_in:
 	model = pickle.load(f_in)
+# creating a function for Prediction
 
+def churn_prediction(gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges):
+
+    prediction=model.predict([[gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,OnlineSecurity,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges]])
+    print(prediction)
+    return prediction
 
 def main():
 	add_selectbox = st.sidebar.selectbox(
 	"How would you like to predict?",
 	("Online", "Batch"))
 	st.title("Predicting Customer Churn")
+
 	if add_selectbox == 'Online':
 		gender = st.selectbox('Gender:', ['male', 'female'])
 		seniorcitizen= st.selectbox(' Customer is a senior citizen:', [0, 1])
@@ -34,45 +41,19 @@ def main():
 		monthlycharges= st.number_input('Monthly charges :', min_value=0, max_value=240, value=0)
 		totalcharges = tenure*monthlycharges
 		output= ""
-		output_prob = ""
-		input_dict={
-				"gender":gender ,
-				"seniorcitizen": seniorcitizen,
-				"partner": partner,
-				"dependents": dependents,
-				"phoneservice": phoneservice,
-				"multiplelines": multiplelines,
-				"internetservice": internetservice,
-				"onlinesecurity": onlinesecurity,
-				"onlinebackup": onlinebackup,
-				"deviceprotection": deviceprotection,
-				"techsupport": techsupport,
-				"streamingtv": streamingtv,
-				"streamingmovies": streamingmovies,
-				"contract": contract,
-				"paperlessbilling": paperlessbilling,
-				"paymentmethod": paymentmethod,
-				"tenure": tenure,
-				"monthlycharges": monthlycharges,
-				"totalcharges": totalcharges
-			}
 
-		if st.button("Predict"):
-			x =(input_dict)
-			y_pred = model.predict_proba(x)
-			churn = y_pred >= 0.5
-			output_prob = float(y_pred)
-			output = bool(churn)
-		st.success('Churn: {0}, Risk Score: {1}'.format(output, output_prob))
-	if add_selectbox == 'Batch':
-		file_upload = st.file_uploader("Upload csv file for predictions", type=["csv"])
-		if file_upload is not None:
-			data = pd.read_csv(file_upload)
-			x =(data)
-			y_pred = model.predict_proba(x)
-			churn = y_pred >= 0.5
-			churn = bool(churn)
-			st.write(churn)
+    # code for Prediction
+     Result = ''
+    
+    # creating a button for Prediction
+    
+    if st.button('predict'):
+        Result= Fall_prediction(TIME,SL,EEG,BP,HR,CIRCLUATION)
+    st.success('The output is {}'.format(Result))
+    if st.button("About"):
+       st.text('Lets LEarn')
+       st.text("Built with Streamilt")
+
 
 if __name__ == '__main__':
-	main()
+    main()
