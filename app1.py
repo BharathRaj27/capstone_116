@@ -59,7 +59,7 @@ def main():
 
 		if st.button("Predict"):
 			x =([input_dict])
-			y_pred = model.predict_proba(X)[0, 1]
+			y_pred = model.predict_proba(x)[0, 1]
 			churn = y_pred >= 0.5
 			output_prob = float(y_pred)
 			output = bool(churn)
@@ -69,7 +69,7 @@ def main():
 		if file_upload is not None:
 			data = pd.read_csv(file_upload)
 			x =([data])
-			y_pred = model.predict_proba(X)[0, 1]
+			y_pred = model.predict_proba(x)[0, 1]
 			churn = y_pred >= 0.5
 			churn = bool(churn)
 			st.write(churn)
