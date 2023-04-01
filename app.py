@@ -2,22 +2,16 @@ import pickle
 import streamlit as st
 import pandas as pd
 from PIL import Image
-model_file = 'model.sav'
+model_file = 'model1.pkl'
 
 with open(model_file, 'rb') as f_in:
-    dv, model = pickle.load(f_in)
+	model = pickle.load(f_in)
 
 
 def main():
-
-	image = Image.open('images/icone.png')
-	image2 = Image.open('images/image.png')
-	st.image(image,use_column_width=False)
 	add_selectbox = st.sidebar.selectbox(
 	"How would you like to predict?",
 	("Online", "Batch"))
-	st.sidebar.info('This app is created to predict Customer Churn')
-	st.sidebar.image(image2)
 	st.title("Predicting Customer Churn")
 	if add_selectbox == 'Online':
 		gender = st.selectbox('Gender:', ['male', 'female'])
@@ -64,8 +58,8 @@ def main():
 			}
 
 		if st.button("Predict"):
-			X = dv.transform([input_dict])
-			y_pred = model.predict_proba(X)[0, 1]
+			x =(input_dict)
+			y_pred = model.predict_proba(x)
 			churn = y_pred >= 0.5
 			output_prob = float(y_pred)
 			output = bool(churn)
@@ -74,8 +68,8 @@ def main():
 		file_upload = st.file_uploader("Upload csv file for predictions", type=["csv"])
 		if file_upload is not None:
 			data = pd.read_csv(file_upload)
-			X = dv.transform([data])
-			y_pred = model.predict_proba(X)[0, 1]
+			x =(data)
+			y_pred = model.predict_proba(x)
 			churn = y_pred >= 0.5
 			churn = bool(churn)
 			st.write(churn)
