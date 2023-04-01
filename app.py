@@ -1,49 +1,129 @@
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier 
+from sklearn import metrics
+from flask import Flask, request, render_template
 import pickle
-import streamlit as st
 
-model_file = 'model1.pkl'
+app = Flask("__name__")
 
-with open(model_file, 'rb') as f_in:
-    model = pickle.load(f_in)
+df_1=pd.read_csv("test(1).csv")
 
-# creating a function for Prediction
-def churn_prediction(gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod, MonthlyCharges, TotalCharges):
-    prediction = model.predict([[gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, InternetService, OnlineSecurity, DeviceProtection, TechSupport, StreamingTV, StreamingMovies, Contract, PaperlessBilling, PaymentMethod, MonthlyCharges, TotalCharges]])
-    return prediction
+q = ""
 
-def main():
-    st.title("Predicting Customer Churn")
+@app.route("/")
+def loadPage():
+	return render_template('home.html', query="")
 
-    gender = st.selectbox('Gender:', ['male', 'female'])
-    seniorcitizen = st.selectbox('Customer is a senior citizen:', [0, 1])
-    partner = st.selectbox('Customer has a partner:', ['yes', 'no'])
-    dependents = st.selectbox('Customer has dependents:', ['yes', 'no'])
-    phoneservice = st.selectbox('Customer has phoneservice:', ['yes', 'no'])
-    multiplelines = st.selectbox('Customer has multiplelines:', ['yes', 'no', 'no_phone_service'])
-    internetservice = st.selectbox('Customer has internetservice:', ['dsl', 'no', 'fiber_optic'])
-    onlinesecurity = st.selectbox('Customer has onlinesecurity:', ['yes', 'no', 'no_internet_service'])
-    onlinebackup = st.selectbox('Customer has onlinebackup:', ['yes', 'no', 'no_internet_service'])
-    deviceprotection = st.selectbox('Customer has deviceprotection:', ['yes', 'no', 'no_internet_service'])
-    techsupport = st.selectbox('Customer has techsupport:', ['yes', 'no', 'no_internet_service'])
-    streamingtv = st.selectbox('Customer has streamingtv:', ['yes', 'no', 'no_internet_service'])
-    streamingmovies = st.selectbox('Customer has streamingmovies:', ['yes', 'no', 'no_internet_service'])
-    contract = st.selectbox('Customer has a contract:', ['month-to-month', 'one_year', 'two_year'])
-    paperlessbilling = st.selectbox('Customer has paperlessbilling:', ['yes', 'no'])
-    paymentmethod = st.selectbox('Payment Option:', ['bank_transfer_(automatic)', 'credit_card_(automatic)', 'electronic_check', 'mailed_check'])
-    tenure = st.number_input('Number of months the customer has been with the current telco provider:', min_value=0, max_value=240, value=0)
-    monthlycharges = st.number_input('Monthly charges:', min_value=0, max_value=240, value=0)
-    totalcharges = tenure * monthlycharges
 
-    # code for Prediction
-    result = ''
-    if st.button('Predict'):
-        result = churn_prediction(gender, seniorcitizen, partner, dependents, tenure, phoneservice, multiplelines, internetservice, onlinesecurity, deviceprotection, techsupport, streamingtv, streamingmovies, contract, paper
-    st.success('The output is {}'.format(result))
-    if st.button("About"):
-       st.text('Lets LEarn')
-       st.text("Built with Streamilt")
+@app.route("/", methods=['POST'])
+def predict():
     
+    '''
+    SeniorCitizen
+    MonthlyCharges
+    TotalCharges
+    gender
+    Partner
+    Dependents
+    PhoneService
+    MultipleLines
+    InternetService
+    OnlineSecurity
+    OnlineBackup
+    DeviceProtection
+    TechSupport
+    StreamingTV
+    StreamingMovies
+    Contract
+    PaperlessBilling
+    PaymentMethod
+    tenure
+    '''
+    
+
+    
+    inputQuery1 = request.form['query1']
+    inputQuery2 = request.form['query2']
+    inputQuery3 = request.form['query3']
+    inputQuery4 = request.form['query4']
+    inputQuery5 = request.form['query5']
+    inputQuery6 = request.form['query6']
+    inputQuery7 = request.form['query7']
+    inputQuery8 = request.form['query8']
+    inputQuery9 = request.form['query9']
+    inputQuery10 = request.form['query10']
+    inputQuery11 = request.form['query11']
+    inputQuery12 = request.form['query12']
+    inputQuery13 = request.form['query13']
+    inputQuery14 = request.form['query14']
+    inputQuery15 = request.form['query15']
+    inputQuery16 = request.form['query16']
+    inputQuery17 = request.form['query17']
+    inputQuery18 = request.form['query18']
+    inputQuery19 = request.form['query19']
+
+    model = pickle.load(open("model1.pkl", "rb"))
+    
+    data = [[inputQuery1, inputQuery2, inputQuery3, inputQuery4, inputQuery5, inputQuery6, inputQuery7, 
+             inputQuery8, inputQuery9, inputQuery10, inputQuery11, inputQuery12, inputQuery13, inputQuery14,
+             inputQuery15, inputQuery16, inputQuery17, inputQuery18, inputQuery19]]
+    
+    new_df = pd.DataFrame(data, columns = ['SeniorCitizen', 'MonthlyCharges', 'TotalCharges', 'gender', 
+                                           'Partner', 'Dependents', 'PhoneService', 'MultipleLines', 'InternetService',
+                                           'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport',
+                                           'StreamingTV', 'StreamingMovies', 'Contract', 'PaperlessBilling',
+                                           'PaymentMethod', 'tenure'])
+    
+    df_2 = pd.concat([df_1, new_df], ignore_index = True) 
+    # Group the tenure in bins of 12 months
+    labels = ["{0} - {1}".format(i, i + 11) for i in range(1, 72, 12)]
+    
+    df_2['tenure_group'] = pd.cut(df_2.tenure.astype(int), range(1, 80, 12), right=False, labels=labels)
+    #drop column customerID and tenure
+    df_2.drop(columns= ['tenure'], axis=1, inplace=True)   
+    
+    
+    
+    
+    new_df__dummies = pd.get_dummies(df_2[['gender', 'SeniorCitizen', 'Partner', 'Dependents', 'PhoneService',
+           'MultipleLines', 'InternetService', 'OnlineSecurity', 'OnlineBackup',
+           'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies',
+           'Contract', 'PaperlessBilling', 'PaymentMethod','tenure_group']])
+    
+    
+    #final_df=pd.concat([new_df__dummies, new_dummy], axis=1)
         
-if __name__ == '__main__':
-    main()
     
+    single = model.predict(new_df__dummies.tail(1))
+    probablity = model.predict_proba(new_df__dummies.tail(1))[:,1]
+    
+    if single==1:
+        o1 = "This customer is likely to be churned!!"
+        o2 = "Confidence: {}".format(probablity*100)
+    else:
+        o1 = "This customer is likely to continue!!"
+        o2 = "Confidence: {}".format(probablity*100)
+        
+    return render_template('home.html', output1=o1, output2=o2, 
+                           query1 = request.form['query1'], 
+                           query2 = request.form['query2'],
+                           query3 = request.form['query3'],
+                           query4 = request.form['query4'],
+                           query5 = request.form['query5'], 
+                           query6 = request.form['query6'], 
+                           query7 = request.form['query7'], 
+                           query8 = request.form['query8'], 
+                           query9 = request.form['query9'], 
+                           query10 = request.form['query10'], 
+                           query11 = request.form['query11'], 
+                           query12 = request.form['query12'], 
+                           query13 = request.form['query13'], 
+                           query14 = request.form['query14'], 
+                           query15 = request.form['query15'], 
+                           query16 = request.form['query16'], 
+                           query17 = request.form['query17'],
+                           query18 = request.form['query18'], 
+                           query19 = request.form['query19'])
+    
+app.run()
