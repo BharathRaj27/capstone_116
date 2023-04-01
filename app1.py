@@ -5,7 +5,7 @@ from PIL import Image
 model_file = 'model1.pkl'
 
 with open(model_file, 'rb') as f_in:
-    dv, model = pickle.load(f_in)
+	model = pickle.load(f_in)
 
 
 def main():
@@ -64,7 +64,7 @@ def main():
 			}
 
 		if st.button("Predict"):
-			X = dv.transform([input_dict])
+			x =([input_dict])
 			y_pred = model.predict_proba(X)[0, 1]
 			churn = y_pred >= 0.5
 			output_prob = float(y_pred)
@@ -74,7 +74,7 @@ def main():
 		file_upload = st.file_uploader("Upload csv file for predictions", type=["csv"])
 		if file_upload is not None:
 			data = pd.read_csv(file_upload)
-			X = dv.transform([data])
+			x =([data])
 			y_pred = model.predict_proba(X)[0, 1]
 			churn = y_pred >= 0.5
 			churn = bool(churn)
