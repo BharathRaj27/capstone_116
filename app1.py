@@ -9,7 +9,9 @@ with open(model_file, 'rb') as f_in:
 
 
 def main():
-
+	add_selectbox = st.sidebar.selectbox(
+	"How would you like to predict?",
+	("Online", "Batch"))
 	st.title("Predicting Customer Churn")
 	if add_selectbox == 'Online':
 		gender = st.selectbox('Gender:', ['male', 'female'])
