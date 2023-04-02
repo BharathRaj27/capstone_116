@@ -25,7 +25,7 @@ def welcome():
     return "Welcome All"
 
 #@app.route('/predict',methods=["Get"])
-def predict_churn(customerID,tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,gender,SeniorCitizen,Partner,Dependents,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies):
+def predict_churn(tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,gender,SeniorCitizen,Partner,Dependents,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies):
     
     """Let's Authenticate the Banks Note 
     This is using docstrings for specifications.
@@ -53,7 +53,7 @@ def predict_churn(customerID,tenure,PhoneService,Contract,PaperlessBilling,Payme
         
     """
    
-    prediction=classifier.predict([[customerID,tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,gender,SeniorCitizen,Partner,Dependents,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies]])
+    prediction=classifier.predict([[tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,gender,SeniorCitizen,Partner,Dependents,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies]])
     print(prediction)
     return prediction
 
@@ -157,7 +157,6 @@ def main():
    
     result=""
     if st.button("Predict"):
-      customerID=float(customerID)
       tenure=float(tenure)
       PhoneService=float(PhoneService)
       Contract=float(Contract)
@@ -178,7 +177,7 @@ def main():
       StreamingTV=float(StreamingTV)
       StreamingMovies=float(StreamingMovies)
       
-      result=predict_churn(customerID,tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,gender,SeniorCitizen,Partner,Dependents,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies)
+      result=predict_churn(tenure,PhoneService,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,gender,SeniorCitizen,Partner,Dependents,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies)
     st.success('The status is {}'.format(result))
     if st.button("About"):
         st.text("Lets LEarn")
