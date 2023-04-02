@@ -22,7 +22,7 @@ sns.set_palette("viridis", 3)
 #image = Image.open('data.JPG')
 #st.image(image, width=700,)
 
-i#mage1= Image.open('con_mat.PNG')  
+#image1= Image.open('con_mat.PNG')  
 #image2= Image.open('ROC_Curve.PNG')
 
 Grboost_model = pickle.load(open('model2.pkl', 'rb'))
