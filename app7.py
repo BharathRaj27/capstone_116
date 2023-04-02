@@ -25,7 +25,7 @@ sns.set_palette("viridis", 3)
 #image1= Image.open('con_mat.PNG')  
 #image2= Image.open('ROC_Curve.PNG')
 
-Grboost_model = pickle.load(open('model2.pkl', 'rb'))
+Grboost_model = pickle.load(open('model.sav', 'rb'))
 
 strings = {
     "gender": ['Female', 'Male'],
