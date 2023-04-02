@@ -103,9 +103,9 @@ with st.sidebar:
                prediction system that uses an ensemble-learning technique consisting of machine-learning algorithms are\
                selected to build a model.')
      st.subheader('Confusion matrix :') 
-     st.image(image1) 
+     #st.image(image1) 
      st.subheader('Receiver operating characteristic curve:')
-     st.image(image2)    
+     #st.image(image2)    
 with st.form('input_form', ):
     with col1:
         tenure = st.number_input('tenure', min_value=0, max_value=100)
